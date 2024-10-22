@@ -1,0 +1,21 @@
+apiVersion: apps.openliberty.io/v1
+kind: OpenLibertyApplication
+metadata:
+  name: {{ .Values.app.componentId }}
+  labels:
+    {{- include "backstage.labels" . | nindent 4 }}
+    {{- include "liberty-template.labels" . | nindent 4 }}
+spec:
+  applicationImage: ghcr.io/rhagarty/default-liberty-app-55:latest
+  expose: true
+  pullPolicy: Always
+  serviceability:
+    size: 1Gi  
+  service:
+    type: ClusterIP
+    port: 9443
+  env:
+    - name: WLP_LOGGING_MESSAGE_FORMAT
+      value: "simple"
+    - name: WLP_LOGGING_MESSAGE_SOURCE
+      value: "message,trace,accessLog,ffdc,audit"
